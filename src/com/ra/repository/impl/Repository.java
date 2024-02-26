@@ -44,22 +44,18 @@ public class Repository<T, K> implements IRepository<T, K> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            Field[] fields = entityClass.getDeclaredFields();
             conn = MySqlConnect.open();
-            String fieldId = Arrays.stream(fields)
-                    .filter(f -> f.getAnnotation(Id.class) != null)
-                    .map(f -> f.getAnnotation(Column.class).name()).findFirst().get();
-            String sql = MessageFormat.format("SELECT * FROM {0} WHERE {1} = ?",
-                    entityClass.getAnnotation(Table.class).name(), fieldId);
+            List<Field> keysField = getKey(entityClass);
+            String keysName = keysField
+                    .stream().map(f -> colName(f) + " = ?")
+                    .collect(Collectors.joining(","));
+            String sql = MessageFormat.format("SELECT * FROM {0} WHERE {1}",
+                    tblName(entityClass), keysName);
             ps = conn.prepareStatement(sql);
             ps.setObject(1, key);
             rs = ps.executeQuery();
             while (rs.next()){
-                T entity = entityClass.getDeclaredConstructor().newInstance();
-                for (Field f: fields){
-                    f.setAccessible(true);
-                    f.set(entity, rs.getObject(f.getAnnotation(Column.class).name()));
-                }
+                T entity = readResultSet(rs, entityClass);
                 return entity;
             }
 
@@ -77,17 +73,15 @@ public class Repository<T, K> implements IRepository<T, K> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            Field[] fields = entity.getClass().getDeclaredFields();
-            String columns = Arrays.stream(fields)
-                    .map(f -> f.getAnnotation(Column.class).name())
-                    .collect(Collectors.joining(","));
-
-            String values = Arrays.stream(fields)
-                    .map(f -> "?").collect(Collectors.joining(","));
-
             conn = MySqlConnect.open();
-            String sql = MessageFormat.format("INSERT INTO {0}({1}) VALUES ({2})",
-                    entity.getClass().getAnnotation(Table.class).name(), columns, values);
+            List<Field> fields = getColumns((Class<T>) entity.getClass());
+
+            String columns = fields.stream()
+                    .map(this::colName).collect(Collectors.joining(","));
+            String values = fields.stream()
+                    .map(f -> "?").collect(Collectors.joining(","));
+            String sql = MessageFormat
+                    .format("INSERT INTO {0}({1}) VALUES ({2})", tblName((Class<T>) entity.getClass()), columns, values);
 
             int index = 1;
             ps = conn.prepareStatement(sql);
@@ -95,8 +89,7 @@ public class Repository<T, K> implements IRepository<T, K> {
                 f.setAccessible(true);
                 ps.setObject(index++, f.get(entity));
             }
-
-            int result = ps.executeUpdate();
+            ps.executeUpdate();
             return entity;
         } catch (Exception ex){
             ex.printStackTrace();
@@ -113,27 +106,15 @@ public class Repository<T, K> implements IRepository<T, K> {
         ResultSet rs = null;
         try {
             conn = MySqlConnect.open();
+            List<Field> updateFields = getColumnsIgnoreKey((Class<T>) entity.getClass());
+            List<Field> keyFields = getKey((Class<T>) entity.getClass());
 
-            Field[] fields = entity.getClass().getDeclaredFields();
-            String tblName = entity.getClass().getAnnotation(Table.class).name();
-            List<Field> updateFields = Arrays.stream(fields)
-                    .filter(f -> f.getAnnotation(Id.class) == null)
-                    .collect(Collectors.toList());
-
-            List<Field> keyFields = Arrays.stream(fields)
-                    .filter(f -> f.getAnnotation(Id.class) != null)
-                    .collect(Collectors.toList());
-
-            String columns = updateFields.stream()
-                    .map(f -> f.getAnnotation(Column.class).name() + " = ?")
-                    .collect(Collectors.joining(","));
-            String key = keyFields.stream()
-                    .map(f -> f.getAnnotation(Column.class).name() + " = ?")
-                    .collect(Collectors.joining(","));
-            String sql = MessageFormat.format("UPDATE {0} SET {1} where {2}", tblName, columns, key);
-
-            int index = 1;
+            String columns = updateFields.stream().map(f -> colName(f) + " = ?").collect(Collectors.joining(","));
+            String key = keyFields.stream().map(f -> colName(f) + " = ?").collect(Collectors.joining(","));
+            String sql = MessageFormat.format("UPDATE {0} SET {1} WHERE {2}", tblName((Class<T>) entity.getClass()), columns, key);
+            // System.out.println(sql);
             ps = conn.prepareStatement(sql);
+            int index = 1;
             for(Field f : updateFields) {
                 f.setAccessible(true);
                 ps.setObject(index++, f.get(entity));
@@ -142,7 +123,7 @@ public class Repository<T, K> implements IRepository<T, K> {
                 f.setAccessible(true);
                 ps.setObject(index++, f.get(entity));
             }
-            int result = ps.executeUpdate();
+            ps.executeUpdate();
             return entity;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -159,12 +140,12 @@ public class Repository<T, K> implements IRepository<T, K> {
         try {
             Field[] fields = entityClass.getDeclaredFields();
             conn = MySqlConnect.open();
-            String fieldId = Arrays.stream(fields)
-                    .filter(f -> f.getAnnotation(Id.class) != null)
-                    .map(f -> f.getAnnotation(Column.class).name())
-                    .findFirst().get();
-            String sql = MessageFormat.format("DELETE FROM {0} WHERE {1} = ?",
-                    entityClass.getAnnotation(Table.class).name(), fieldId);
+            String fieldId = Arrays.stream(fields).map(f -> colName(f) + " = ?").collect(Collectors.joining(","));
+                  //  .filter(f -> f.getAnnotation(Id.class) != null)
+                 //   .map(f -> f.getAnnotation(Column.class).name())
+                  //  .findFirst().get();
+            String sql = MessageFormat.format("DELETE FROM {0} WHERE {1}",
+                    tblName(entityClass), fieldId);
 
             ps = conn.prepareStatement(sql);
             ps.setObject(1, id);
@@ -206,5 +187,26 @@ public class Repository<T, K> implements IRepository<T, K> {
         if (Objects.nonNull(column))
             return column.name();
         return null;
+    }
+
+    private List<Field> getKey(Class<T> entityClass) {
+        List<Field> fields = getColumns(entityClass);
+        return fields.stream()
+                .filter(f -> Objects.nonNull(f.getAnnotation(Id.class)))
+                .collect(Collectors.toList());
+    }
+
+    private String tblName(Class<T> entityClass) {
+        Table table = entityClass.getAnnotation(Table.class);
+        if (Objects.nonNull(table))
+            return table.name();
+        return null;
+    }
+
+    private List<Field> getColumnsIgnoreKey(Class<T> entityClass) {
+        List<Field> fields = getColumns(entityClass);
+        return fields.stream()
+                .filter(f -> Objects.isNull(f.getAnnotation(Id.class)))
+                .collect(Collectors.toList());
     }
 }

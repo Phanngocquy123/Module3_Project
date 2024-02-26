@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Table(name = "Bill")
 public class Bill {
-    @Id
+    @Id(autoIncrement = true)
     @Column(name = "Bill_id")
     private long billId;
     @Column(name = "Bill_Code")

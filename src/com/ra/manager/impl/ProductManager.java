@@ -1,6 +1,7 @@
-package com.ra.manager;
+package com.ra.manager.impl;
 
 import com.ra.entity.Product;
+import com.ra.manager.Manager;
 import com.ra.repository.impl.Repository;
 import com.ra.service.ProductService;
 import com.ra.service.impl.ProductServiceImpl;
@@ -9,17 +10,17 @@ import com.ra.util.DateFomat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class ProductManager implements Manager{
+public class ProductManager implements Manager {
     private ProductService productService;
 
-    public ProductManager(){
+    public ProductManager() {
         this.productService = new ProductServiceImpl();
     }
 
     @Override
     public void run() {
-
         do {
             System.out.println("***************PRODUCT MANAGEMENT***************");
             System.out.println("1. Danh sách sản phẩm");
@@ -30,25 +31,21 @@ public class ProductManager implements Manager{
             System.out.println("6. Thoát");
             System.out.print("Chọn chức năng: ");
             int choose = Integer.parseInt(Console.scanner.nextLine());
-            switch (choose){
+            switch (choose) {
                 case 1:
-                    Product.showHeader();
-                    for (Product p : productService.findAll()){
-                        try {
-                            p.show();
-                        } catch (Exception ex){
-                            ex.printStackTrace();
-                        }
-                    }
-                    System.out.println("==============================================================");
+                    productService.showAll();
                     break;
                 case 2:
+                    productService.add();
                     break;
                 case 3:
+                    productService.update();
                     break;
                 case 4:
+                    productService.findByName();
                     break;
                 case 5:
+                    productService.updateStatus();
                     break;
                 case 6:
                     return;
@@ -58,4 +55,5 @@ public class ProductManager implements Manager{
 
         } while (true);
     }
+
 }

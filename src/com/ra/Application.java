@@ -1,18 +1,16 @@
 package com.ra;
 
-import com.ra.entity.Product;
 import com.ra.manager.Manager;
-import com.ra.manager.ProductManager;
-import com.ra.service.ProductService;
-import com.ra.service.impl.ProductServiceImpl;
+import com.ra.manager.impl.AccountManager;
+import com.ra.manager.impl.EmployeeManager;
+import com.ra.manager.impl.ProductManager;
 import com.ra.util.Console;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Application {
     public static void main(String[] args) {
         Manager productManager = new ProductManager();
+        Manager employeeManager = new EmployeeManager();
+        Manager accountManager = new AccountManager();
         do {
             System.out.println("ADMIN***************WAREHOUSE MANAGEMENT***************");
             System.out.println("1. Quản lý sản phẩm");
@@ -29,8 +27,10 @@ public class Application {
                     productManager.run();
                     break;
                 case 2:
+                    employeeManager.run();
                     break;
                 case 3:
+                    accountManager.run();
                     break;
                 case 4:
                     break;
@@ -57,20 +57,9 @@ public class Application {
 
 //
 //
-//        System.out.println("***************EMPLOYEE MANAGEMENT***************");
-//        System.out.println("1. Danh sách nhân viên");
-//        System.out.println("2. Thêm mới nhân viên");
-//        System.out.println("3. Cập nhật thông tin sinh viên");
-//        System.out.println("4. Cập nhật trạng thái sinh viên");
-//        System.out.println("5. Tìm kiếm nhân viên");
-//        System.out.println("6. Thoát");
+
 //
-//        System.out.println("***************ACCOUNT MANAGEMENT***************");
-//        System.out.println("1. Danh sách tài khoản");
-//        System.out.println("2. Tạo tài khoản mới");
-//        System.out.println("3. Cập nhật trạng thái tài khoản");
-//        System.out.println("4. Tìm kiếm tài khoản");
-//        System.out.println("5. Thoát");
+
 //
 //        System.out.println("***************RECEIPT MANAGEMENT***************");
 //        System.out.println("1. Danh sách phiếu nhập");

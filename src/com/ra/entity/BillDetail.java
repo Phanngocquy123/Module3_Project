@@ -7,7 +7,7 @@ import com.ra.util.Table;
 
 @Table(name = "Bill_detail")
 public class BillDetail {
-    @Id
+    @Id(autoIncrement = true)
     @Column(name = "Bill_Detail_Id")
     private long billDetailId;
     @Column(name = "Bill_Id")

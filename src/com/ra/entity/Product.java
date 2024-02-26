@@ -5,15 +5,16 @@ import com.ra.util.Column;
 import com.ra.util.Id;
 import com.ra.util.Table;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Table(name = "Product")
 public class Product {
-    @Id
+    @Id(autoIncrement = false)
     @Column(name = "Product_id")
     private String productId;
-    @Column(name = "Prodcut_Name")
+    @Column(name = "Product_Name")
     private String productName;
     @Column(name = "Manufacturer")
     private String manufacturer;
@@ -106,12 +107,13 @@ public class Product {
         this.productStatus = productStatus;
     }
     public static void showHeader(){
-        System.out.println("==============================================================");
-        System.out.println("| Product ID | Product Name | Manufacturer | Created            |");
+        System.out.println("===========================================DANH SÁCH SẢN PHẨM===========================================");
+        System.out.println("| Product ID | Product Name | Manufacturer      | Created            | Batch | Quantity | Product Satus");
     }
     public void show(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         String formattedDate = dateFormat.format(this.created);
-        System.out.printf("| %-11s| %-13s| %-13s| %-19s|\n", productId, productName, manufacturer, formattedDate);
+        System.out.printf("| %-11s| %-13s| %-18s| %-19s| %-6d| %-9d| %s\n",
+                this.productId, this.productName, this.manufacturer, formattedDate, this.batch, this.quantity, this.productStatus?"Hoạt động":"Không hoạt động");
     }
 }

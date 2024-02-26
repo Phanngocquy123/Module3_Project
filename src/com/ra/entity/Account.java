@@ -5,9 +5,11 @@ import com.ra.util.Column;
 import com.ra.util.Id;
 import com.ra.util.Table;
 
+import java.text.SimpleDateFormat;
+
 @Table(name = "Account")
 public class Account {
-    @Id
+    @Id(autoIncrement = true)
     @Column(name = "Acc_Id")
     private int accountId;
     @Column(name = "User_name")
@@ -24,8 +26,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(int accountId, String userName, String password, boolean permission, String employeeId, boolean accountStatus) {
-        this.accountId = accountId;
+    public Account(String userName, String password, boolean permission, String employeeId, boolean accountStatus) {
         this.userName = userName;
         this.password = password;
         this.permission = permission;
@@ -85,5 +86,15 @@ public class Account {
 
     public void setAccountStatus(boolean accountStatus) {
         this.accountStatus = accountStatus;
+    }
+
+    public static void showHeader() {
+        System.out.println("===========================DANH SÁCH TÀI KHOẢN===============================");
+        System.out.println("| Acc_Id| User_Name        | Password     | Permission| Emp_id| Acc_Satus");
+    }
+
+    public void show() {
+        System.out.printf("| %-6d| %-17s| %-13s| %-10s| %-6s| %s\n",
+                this.accountId, this.userName, this.password, this.permission?"admin":"user", this.employeeId, this.accountStatus?"active":"block");
     }
 }
