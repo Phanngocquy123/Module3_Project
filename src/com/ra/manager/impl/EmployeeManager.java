@@ -2,13 +2,15 @@ package com.ra.manager.impl;
 
 import com.ra.manager.Manager;
 import com.ra.service.EmployeeService;
+import com.ra.service.impl.AccountServiceImpl;
 import com.ra.service.impl.EmployeeServiceImpl;
 import com.ra.util.Console;
 
 public class EmployeeManager implements Manager {
     private EmployeeService employeeService;
+   AccountServiceImpl accountService = new AccountServiceImpl();
     public EmployeeManager(){
-        this.employeeService = new EmployeeServiceImpl();
+        this.employeeService = new EmployeeServiceImpl(accountService.getAccountRepository());
     }
     @Override
     public void run() {

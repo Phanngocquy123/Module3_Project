@@ -69,6 +69,10 @@ insert into Account (User_name, Password, Permission, Emp_id, Acc_status) values
 ('user1', 'user123', 1, 'EMP02', 1),
 ('user2', 'user456', 1, 'EMP03', 1)
 ;
+select * from Account;
+SELECT Account.Acc_Id, Account.User_name, Employee.Emp_Name
+FROM Account
+JOIN Employee ON Account.Emp_id = Employee.Emp_Id;
 
 create table Bill(
 Bill_id long primary key auto_increment,

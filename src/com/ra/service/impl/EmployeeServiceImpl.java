@@ -1,5 +1,6 @@
 package com.ra.service.impl;
 
+import com.ra.entity.Account;
 import com.ra.entity.Employee;
 import com.ra.entity.Product;
 import com.ra.repository.impl.Repository;
@@ -11,9 +12,14 @@ import java.util.*;
 
 public class EmployeeServiceImpl implements EmployeeService {
     private Repository<Employee, String> employeeRepository;
-
-    public EmployeeServiceImpl() {
+    private Repository<Account, Integer> accountRepository;
+    AccountServiceImpl accountService = new AccountServiceImpl();
+    public EmployeeServiceImpl(Repository<Account, Integer> accountRepository) {
         this.employeeRepository = new Repository<>();
+        this.accountRepository = accountRepository;
+    }
+    public void setAccountRepository(Repository<Account, Integer> accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -103,22 +109,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         showAll();
         System.out.println("< Cập nhật trạng thái nhân viên >");
         System.out.print("Nhập mã nhân viên muốn cập nhật trạng thái: ");
-        String idUpdateStatus = Console.scanner.nextLine();
-        Employee newEmpStatus = findId(idUpdateStatus);
+        String empIdStatus = Console.scanner.nextLine();
+        Employee newEmpStatus = findId(empIdStatus);
         if (newEmpStatus != null) {
             try {
                 String oldStatus = Employee.convertEmployeeStatus(newEmpStatus.getEmployeeStatus());
-                System.out.printf("Trạng thái hiện tại của nhân viên (Id: %s) là: %s\n", idUpdateStatus, oldStatus);
+                System.out.printf("Trạng thái hiện tại của nhân viên (Id: %s) là: %s\n", empIdStatus, oldStatus);
                 System.out.print("Nhập trạng thái mới 0-Hoạt động; 1-Nghỉ chế độ; 2-Nghỉ việc: ");
                 int newStatus = Integer.parseInt(Console.scanner.nextLine());
                 newEmpStatus.setEmployeeStatus(newStatus);
                 employeeRepository.edit(newEmpStatus);
-                System.out.println("Cập nhật thông tin nhân viên Id - " + idUpdateStatus + " thành công");
+                System.out.println("Cập nhật thông tin nhân viên Id - " + empIdStatus + " thành công");
+
+                if (newStatus ==1 || newStatus ==2){
+                    Account account = accountService.findByEmpId(empIdStatus);
+                    if (account != null){
+                        account.setAccountStatus(false);
+                        accountRepository.edit(account);
+                        System.out.printf("Nhân viên có Id - %s đã chuyển sang trạng thái: %s \n",
+                                empIdStatus, account.isAccountStatus()?"Active":"Block");
+                    }
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         } else
-            System.out.println("Không tìm thấy nhân viên có mã Id - " + idUpdateStatus);
+            System.out.println("Không tìm thấy nhân viên có mã Id - " + empIdStatus);
     }
 
     @Override

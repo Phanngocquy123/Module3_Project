@@ -108,7 +108,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateStatus() {
-        System.out.println("< Cập nhật trạng thái sản phẩm >");
         System.out.print("Nhập Id sản phẩm muốn cập nhật trạng thái: ");
         String idUpdateStatus = Console.scanner.nextLine();
         Product newProStatus = findId(idUpdateStatus);

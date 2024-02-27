@@ -21,6 +21,7 @@ public class AccountManager implements Manager {
             System.out.println("3. Cập nhật trạng thái tài khoản");
             System.out.println("4. Tìm kiếm tài khoản");
             System.out.println("5. Thoát");
+            System.out.print("Nhập lựa chọn: ");
             int choose = Integer.parseInt(Console.scanner.nextLine());
             switch (choose) {
                 case 1:
@@ -30,10 +31,10 @@ public class AccountManager implements Manager {
                     accountService.add();
                     break;
                 case 3:
-
+                    accountService.updateStatus();
                     break;
                 case 4:
-
+                    accountService.findByNameOrUserName();
                     break;
                 case 5:
                     return;

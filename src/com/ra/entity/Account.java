@@ -95,6 +95,6 @@ public class Account {
 
     public void show() {
         System.out.printf("| %-6d| %-17s| %-13s| %-10s| %-6s| %s\n",
-                this.accountId, this.userName, this.password, this.permission?"admin":"user", this.employeeId, this.accountStatus?"active":"block");
+                this.accountId, this.userName, this.password, this.permission?"Admin":"User", this.employeeId, this.accountStatus?"Active":"Block");
     }
 }
