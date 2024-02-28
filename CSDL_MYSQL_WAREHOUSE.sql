@@ -75,20 +75,42 @@ FROM Account
 JOIN Employee ON Account.Emp_id = Employee.Emp_Id;
 
 create table Bill(
-Bill_id long primary key auto_increment,
+Bill_id bigint primary key auto_increment,
 Bill_Code varchar(10) not null,
 Bill_Type bit  not null, -- 1:nhập, 0: xuất
 Emp_id_created char(5) not null, foreign key (Emp_id_created) references Employee (Emp_Id), -- mã nhân viên nhập/ xuất
-Created date default (curdate()),
+Created timestamp default current_timestamp,
 Emp_id_auth char(5) not null, foreign key (Emp_id_auth) references Employee (Emp_Id), -- mã nhân viên duyệt
-Auth_date date default current_timestamp, -- ngayduyet
+Auth_date timestamp default current_timestamp, -- ngayduyet
 Bill_Status smallint not null default 0 -- 0: tạo, 1: hủy, 2: duyệt
 );
 
 create table Bill_detail(
-Bill_Detail_Id long primary key auto_increment,
-Bill_Id long not null, foreign key (Bill_Id) references Bill (Bill_id), -- mã phiếu nhập/ xuất
+Bill_Detail_Id bigint primary key auto_increment,
+Bill_Id bigint not null, foreign key (Bill_Id) references Bill (Bill_id), -- mã phiếu nhập/ xuất
 Product_Id char(5) not null, foreign key (Product_Id) references Product (Product_id),
 Quantity int not null check (Quantity > 0),
 Price float not null check (Price > 0)
 );
+
+insert into Bill(Bill_Code, Bill_Type, Emp_id_created, Emp_id_auth, Bill_Status) values
+('B0001', 1, 'EMP01', 'EMP02', 0),
+('B0002', 1, 'EMP01', 'EMP03', 0),
+('B0003', 1, 'EMP02', 'EMP01', 0),
+('B0004', 1, 'EMP03', 'EMP01', 0),
+('B0005', 1, 'EMP02', 'EMP03', 0)
+;
+insert into Bill(Bill_Code, Bill_Type, Emp_id_created, Emp_id_auth, Bill_Status) values
+('B0006', 0, 'EMP09', 'EMP02', 0),
+('B0007', 0, 'EMP10', 'EMP03', 0),
+('B0008', 1, 'EMP12', 'EMP01', 0),
+('B0009', 1, 'EMP02', 'EMP03', 0)
+;
+
+insert into Bill_detail(Bill_Id, Product_Id, Quantity, Price) values
+(1, 'P0001', 20, 100.5),
+(1, 'P0002', 25, 120),
+(2, 'P0003', 50, 20),
+(2, 'P0004', 20, 115),
+(3, 'P0005', 10, 200.5)
+;

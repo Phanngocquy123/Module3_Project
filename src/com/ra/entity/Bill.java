@@ -5,6 +5,7 @@ import com.ra.util.Column;
 import com.ra.util.Id;
 import com.ra.util.Table;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Table(name = "Bill")
@@ -78,8 +79,8 @@ public class Bill {
     }
 
     public void setBillCode(String billCode) throws Exception{
-        if (billCode.length() != 10)
-            throw new InputException("-> Mã code phải gồm 10 ký tự");
+        if (billCode.length() > 10)
+            throw new InputException("-> Mã code không vượt quá 10 ký tự");
         this.billCode = billCode;
     }
 
@@ -111,5 +112,26 @@ public class Bill {
         if (billStatus != 0 && billStatus != 1 && billStatus != 2)
             throw new InputException("-> Trạng thái: 0-Tạo; 1-Hủy;  2-Duyệt");
         this.billStatus = billStatus;
+    }
+
+    public static void showHeader(){
+        System.out.println("===========================================DANH SÁCH PHIẾU NHẬP===============================================");
+        System.out.println("| Bill_Id| Bill_Code | Bill_Type| Emp_id_created| Created            | Emp_id_auth| Auth_date           | Bill_status");
+    }
+    public void show(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String formattedDate = dateFormat.format(this.created);
+        String statusResult = convertBillStatus(this.billStatus);
+        System.out.printf("| %-7d| %-10s| %-9s| %-14s| %-19s| %-11s| %-19s |%s\n",
+                this.billId, this.billCode, this.billType?"Nhập":"Xuất", this.employeeIdCreated, formattedDate, this.employeeIdAuth, formattedDate, statusResult);
+    }
+
+    public static String convertBillStatus(int billStatus) {
+        return switch (billStatus) {
+            case 0 -> "Tạo";
+            case 1 -> "Hủy";
+            case 2 -> "Duyệt";
+            default -> "Trạng thái không xác định";
+        };
     }
 }

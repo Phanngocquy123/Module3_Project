@@ -8,10 +8,12 @@ import com.ra.util.Console;
 
 public class EmployeeManager implements Manager {
     private EmployeeService employeeService;
-   AccountServiceImpl accountService = new AccountServiceImpl();
-    public EmployeeManager(){
+    AccountServiceImpl accountService = new AccountServiceImpl();
+
+    public EmployeeManager() {
         this.employeeService = new EmployeeServiceImpl(accountService.getAccountRepository());
     }
+
     @Override
     public void run() {
         do {
@@ -45,6 +47,6 @@ public class EmployeeManager implements Manager {
                 default:
                     System.out.println("Hãy nhập từ 1-6");
             }
-        }while (true);
+        } while (true);
     }
 }

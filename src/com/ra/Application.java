@@ -4,6 +4,7 @@ import com.ra.manager.Manager;
 import com.ra.manager.impl.AccountManager;
 import com.ra.manager.impl.EmployeeManager;
 import com.ra.manager.impl.ProductManager;
+import com.ra.manager.impl.ReceiptManager;
 import com.ra.util.Console;
 
 public class Application {
@@ -11,6 +12,7 @@ public class Application {
         Manager productManager = new ProductManager();
         Manager employeeManager = new EmployeeManager();
         Manager accountManager = new AccountManager();
+        Manager receiptManager = new ReceiptManager();
         do {
             System.out.println("ADMIN***************WAREHOUSE MANAGEMENT***************");
             System.out.println("1. Quản lý sản phẩm");
@@ -33,6 +35,7 @@ public class Application {
                     accountManager.run();
                     break;
                 case 4:
+                    receiptManager.run();
                     break;
                 case 5:
                     break;
@@ -53,22 +56,7 @@ public class Application {
 
 
 
-//
 
-//
-//
-
-//
-
-//
-//        System.out.println("***************RECEIPT MANAGEMENT***************");
-//        System.out.println("1. Danh sách phiếu nhập");
-//        System.out.println("2. Tạo phiếu nhập");
-//        System.out.println("3. Cập nhật thông tin phiếu nhập");
-//        System.out.println("4. Chi tiết phiếu nhập");
-//        System.out.println("5. Duyệt phiếu nhập");
-//        System.out.println("6. Tìm kiếm phiếu nhập");
-//        System.out.println("7. Thoát");
 //
 //        System.out.println("***************BILL MANAGEMENT***************");
 //        System.out.println("1. Danh sách phiếu xuất");

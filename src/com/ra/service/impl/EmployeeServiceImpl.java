@@ -13,13 +13,23 @@ import java.util.*;
 public class EmployeeServiceImpl implements EmployeeService {
     private Repository<Employee, String> employeeRepository;
     private Repository<Account, Integer> accountRepository;
+
     AccountServiceImpl accountService = new AccountServiceImpl();
+
     public EmployeeServiceImpl(Repository<Account, Integer> accountRepository) {
         this.employeeRepository = new Repository<>();
         this.accountRepository = accountRepository;
     }
+
+    public EmployeeServiceImpl() {
+        this.employeeRepository = new Repository<>();
+    }
+
     public void setAccountRepository(Repository<Account, Integer> accountRepository) {
         this.accountRepository = accountRepository;
+    }
+    public Repository<Employee, String> getEmployeeRepository(){
+        return employeeRepository;
     }
 
     @Override
