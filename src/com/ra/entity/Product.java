@@ -111,7 +111,7 @@ public class Product {
         System.out.println("| Product ID | Product Name | Manufacturer      | Created            | Batch | Quantity | Product Satus");
     }
     public void show(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String formattedDate = dateFormat.format(this.created);
         System.out.printf("| %-11s| %-13s| %-18s| %-19s| %-6d| %-9d| %s\n",
                 this.productId, this.productName, this.manufacturer, formattedDate, this.batch, this.quantity, this.productStatus?"Hoạt động":"Không hoạt động");

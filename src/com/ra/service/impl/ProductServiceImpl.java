@@ -16,6 +16,9 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = new Repository<>();
     }
 
+    public Repository<Product, String> getProductRepository(){
+        return productRepository;
+    }
 
     @Override
     public void showAll(){
@@ -134,8 +137,8 @@ public class ProductServiceImpl implements ProductService {
             }
             System.out.printf("Trang: %d/%d\n", currentPage, pageToal);
             System.out.println("<--(1) Trang trước __ Trang sau (2)-->");
-            System.out.println("(3) Trở về menu PRODUCT MANAGEMENT");
-            System.out.print("Nhập lựa chọn: ");
+            System.out.println("(3) Trở lại");
+            System.out.print("Nhập lựa chọn (1) (2) (3): ");
             int choice = Integer.parseInt(Console.scanner.nextLine());
 
             switch (choice) {

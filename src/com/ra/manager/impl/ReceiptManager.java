@@ -5,15 +5,19 @@ import com.ra.manager.Manager;
 import com.ra.repository.impl.Repository;
 import com.ra.service.ReceiptService;
 import com.ra.service.impl.EmployeeServiceImpl;
+import com.ra.service.impl.ProductServiceImpl;
 import com.ra.service.impl.ReceiptServiceImpl;
 import com.ra.util.Console;
 
 public class ReceiptManager implements Manager {
     private ReceiptService receiptService;
-    EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
     public ReceiptManager(){
-        this.receiptService = new ReceiptServiceImpl(employeeService.getEmployeeRepository());
+        this.receiptService = new ReceiptServiceImpl(employeeService.getEmployeeRepository(), productService.getProductRepository());
     }
+
+    EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+    ProductServiceImpl productService = new ProductServiceImpl();
+
     @Override
     public void run() {
         do {
@@ -35,13 +39,13 @@ public class ReceiptManager implements Manager {
                     receiptService.add();
                     break;
                 case 3:
-
+                    receiptService.update();
                     break;
                 case 4:
                     receiptService.findAllDetail();
                     break;
                 case 5:
-
+                    receiptService.approve();
                     break;
                 case 6:
                     break;

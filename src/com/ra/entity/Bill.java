@@ -31,8 +31,7 @@ public class Bill {
     public Bill() {
     }
 
-    public Bill(long billId, String billCode, boolean billType, String employeeIdCreated, Date created, String employeeIdAuth, Date authDate, int billStatus) {
-        this.billId = billId;
+    public Bill(String billCode, boolean billType, String employeeIdCreated, Date created, String employeeIdAuth, Date authDate, int billStatus) {
         this.billCode = billCode;
         this.billType = billType;
         this.employeeIdCreated = employeeIdCreated;
@@ -99,8 +98,8 @@ public class Bill {
     }
 
     public void setEmployeeIdAuth(String employeeIdAuth) throws Exception{
-        if (employeeIdAuth.length() != 5)
-            throw new InputException("-> Mã nhân viên duyệt phải gồm 5 ký tự");
+        if (employeeIdAuth.length() > 5)
+            throw new InputException("-> Mã nhân viên duyệt < 6 ký tự");
         this.employeeIdAuth = employeeIdAuth;
     }
 
@@ -119,11 +118,12 @@ public class Bill {
         System.out.println("| Bill_Id| Bill_Code | Bill_Type| Emp_id_created| Created            | Emp_id_auth| Auth_date           | Bill_status");
     }
     public void show(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        String formattedDate = dateFormat.format(this.created);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String created = dateFormat.format(this.created);
+        String authDate = dateFormat.format(this.authDate);
         String statusResult = convertBillStatus(this.billStatus);
         System.out.printf("| %-7d| %-10s| %-9s| %-14s| %-19s| %-11s| %-19s |%s\n",
-                this.billId, this.billCode, this.billType?"Nhập":"Xuất", this.employeeIdCreated, formattedDate, this.employeeIdAuth, formattedDate, statusResult);
+                this.billId, this.billCode, this.billType?"Nhập":"Xuất", this.employeeIdCreated, created, this.employeeIdAuth, authDate, statusResult);
     }
 
     public static String convertBillStatus(int billStatus) {

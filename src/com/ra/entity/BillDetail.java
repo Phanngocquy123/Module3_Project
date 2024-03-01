@@ -24,8 +24,7 @@ public class BillDetail {
     public BillDetail() {
     }
 
-    public BillDetail(long billDetailId, long billId, String productId, int quantity, float price) {
-        this.billDetailId = billDetailId;
+    public BillDetail(long billId, String productId, int quantity, float price) {
         this.billId = billId;
         this.productId = productId;
         this.quantity = quantity;

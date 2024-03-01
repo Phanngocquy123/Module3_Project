@@ -14,10 +14,10 @@ import java.util.List;
 
 public class ProductManager implements Manager {
     private ProductService productService;
-
     public ProductManager() {
         this.productService = new ProductServiceImpl();
     }
+
 
     @Override
     public void run() {

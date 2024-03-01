@@ -8,12 +8,11 @@ import com.ra.util.Console;
 
 public class EmployeeManager implements Manager {
     private EmployeeService employeeService;
-    AccountServiceImpl accountService = new AccountServiceImpl();
-
     public EmployeeManager() {
         this.employeeService = new EmployeeServiceImpl(accountService.getAccountRepository());
     }
 
+    AccountServiceImpl accountService = new AccountServiceImpl();
     @Override
     public void run() {
         do {
