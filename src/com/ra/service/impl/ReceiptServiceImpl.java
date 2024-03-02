@@ -243,13 +243,18 @@ public class ReceiptServiceImpl implements GoodsSlipService {
 
     @Override
     public void findByIdOrCode() {
+        int count =0 ;
         System.out.print("Nhập mã phiếu hoặc mã code cần tìm (Bill_id or Bill_code): ");
         String search = Console.scanner.nextLine().toLowerCase();
         Bill.showHeader();
         for (Bill b : receiptRepository.findAll(Bill.class)) {
             if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && b.isBillType()) {
                 b.show();
+                count++;
             }
+        }
+        if (count == 0){
+            System.out.print("Không tìm thấy phiếu xuất với từ khóa: "+ search);
         }
     }
 }

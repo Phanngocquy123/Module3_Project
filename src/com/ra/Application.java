@@ -11,6 +11,7 @@ public class Application {
         Manager accountManager = new AccountManager();
         Manager receiptManager = new ReceiptManager();
         Manager billManager = new BillManager();
+        Manager statisticsManager = new StatisticsManager();
         do {
             System.out.println("ADMIN***************WAREHOUSE MANAGEMENT***************");
             System.out.println("1. Quản lý sản phẩm");
@@ -39,6 +40,7 @@ public class Application {
                     billManager.run();
                     break;
                 case 6:
+                    statisticsManager.run();
                     break;
                 case 7:
                     return;
@@ -58,17 +60,7 @@ public class Application {
 
 
 //
-//        System.out.println("***************REPORT MANAGEMENT***************");
-//        System.out.println("1. Thống kê chi phí theo ngày, tháng, năm");
-//        System.out.println("2. Thống kê chi phí theo khoảng thời gian");
-//        System.out.println("3. Thống kê doanh thu theo ngày, tháng, năm");
-//        System.out.println("4. Thống kê doanh thu theo khoảng thời gian");
-//        System.out.println("5. Thống kê số nhân viên theo từng trạng thái");
-//        System.out.println("6. Thống kê sản phẩm nhập nhiều nhất trong khoảng thời gian");
-//        System.out.println("7. Thống kê sản phẩm nhập ít nhất trong khoảng thời gian");
-//        System.out.println("8. Thống kê sản phẩm xuất nhiều nhất trong khoảng thời gian");
-//        System.out.println("9. Thống kê sản phẩm xuất ít nhất trong khoảng thời gian");
-//        System.out.println("10. Thoát");
+
 //
 //        System.out.println("USER***************WAREHOUSE MANAGEMENT***************");
 //        System.out.println("1. Danh sách phiếu nhập theo trạng thái");

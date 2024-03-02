@@ -114,7 +114,7 @@ public class Bill {
     }
 
     public static void showHeader(){
-        System.out.println("===========================================DANH SÁCH PHIẾU NHẬP===============================================");
+        System.out.println("===========================================DANH SÁCH PHIẾU===============================================");
         System.out.println("| Bill_Id| Bill_Code | Bill_Type| Emp_id_created| Created            | Emp_id_auth| Auth_date           | Bill_status");
     }
     public void show(){

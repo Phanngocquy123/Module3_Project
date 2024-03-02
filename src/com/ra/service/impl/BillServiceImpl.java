@@ -80,7 +80,7 @@ public class BillServiceImpl implements GoodsSlipService{
                 bill.setBillCode(Console.scanner.nextLine());
                 bill.setBillType(false);
                 employeeService.showAll();
-                System.out.print("Nhập mã nhân viên nhập: ");
+                System.out.print("Nhập mã nhân viên XUẤT: ");
                 String empployeeId = Console.scanner.nextLine();
                 bill.setEmployeeIdCreated(empployeeId);
                 bill.setEmployeeIdAuth(empployeeId); // tạm thời lấy thằng này, khi cập nhật sẽ chọn lại
@@ -97,7 +97,7 @@ public class BillServiceImpl implements GoodsSlipService{
                 billDetail.setProductId(Console.scanner.nextLine());
                 System.out.print("Nhập số lượng sản phẩm: ");
                 billDetail.setQuantity(Integer.parseInt(Console.scanner.nextLine()));
-                System.out.print("Nhập giá Xuất: ");
+                System.out.print("Nhập giá XUẤT: ");
                 billDetail.setPrice(Float.parseFloat(Console.scanner.nextLine()));
                 billDetailRepository.add(billDetail);
 
@@ -172,7 +172,7 @@ public class BillServiceImpl implements GoodsSlipService{
             }
             System.out.print("Nhập mới số lượng sản phẩm: ");
             billDetailToUpdate.setQuantity(Integer.parseInt(Console.scanner.nextLine()));
-            System.out.print("Nhập mới giá Nhập: ");
+            System.out.print("Nhập mới giá XUẤT: ");
             billDetailToUpdate.setPrice(Float.parseFloat(Console.scanner.nextLine()));
 
             billRepository.edit(billToUpdate);
@@ -245,13 +245,18 @@ public class BillServiceImpl implements GoodsSlipService{
 
     @Override
     public void findByIdOrCode() {
+        int count = 0;
         System.out.print("Nhập mã phiếu hoặc mã code cần tìm (Bill_id or Bill_code): ");
         String search = Console.scanner.nextLine().toLowerCase();
         Bill.showHeader();
         for (Bill b : billRepository.findAll(Bill.class)) {
             if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && !b.isBillType()) {
                 b.show();
+                count++;
             }
+        }
+        if (count ==0){
+            System.out.print("Không tìm thấy phiếu xuất với từ khóa: "+ search);
         }
     }
 }
