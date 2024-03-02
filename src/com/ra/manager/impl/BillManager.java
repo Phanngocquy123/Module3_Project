@@ -2,15 +2,15 @@ package com.ra.manager.impl;
 
 import com.ra.manager.Manager;
 import com.ra.service.GoodsSlipService;
+import com.ra.service.impl.BillServiceImpl;
 import com.ra.service.impl.EmployeeServiceImpl;
 import com.ra.service.impl.ProductServiceImpl;
-import com.ra.service.impl.ReceiptServiceImpl;
 import com.ra.util.Console;
 
-public class ReceiptManager implements Manager {
-    private GoodsSlipService receiptService;
-    public ReceiptManager(){
-        this.receiptService = new ReceiptServiceImpl(employeeService.getEmployeeRepository(), productService.getProductRepository());
+public class BillManager implements Manager {
+    private GoodsSlipService billService;
+    public BillManager(){
+        this.billService = new BillServiceImpl(employeeService.getEmployeeRepository(), productService.getProductRepository());
     }
 
     EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
@@ -20,33 +20,33 @@ public class ReceiptManager implements Manager {
     public void run() {
         do {
             System.out.println("***************RECEIPT MANAGEMENT***************");
-            System.out.println("1. Danh sách phiếu nhập");
-            System.out.println("2. Tạo phiếu nhập");
-            System.out.println("3. Cập nhật thông tin phiếu nhập");
-            System.out.println("4. Chi tiết phiếu nhập");
-            System.out.println("5. Duyệt phiếu nhập");
-            System.out.println("6. Tìm kiếm phiếu nhập");
+            System.out.println("1. Danh sách phiếu xuất");
+            System.out.println("2. Tạo phiếu xuất");
+            System.out.println("3. Cập nhật thông tin phiếu xuất");
+            System.out.println("4. Chi tiết phiếu xuất");
+            System.out.println("5. Duyệt phiếu xuất");
+            System.out.println("6. Tìm kiếm phiếu xuất");
             System.out.println("7. Thoát");
             System.out.print("Nhập lựa chọn: ");
             int choose = Integer.parseInt(Console.scanner.nextLine());
             switch (choose) {
                 case 1:
-                    receiptService.findAll();
+                    billService.findAll();
                     break;
                 case 2:
-                    receiptService.add();
+                    billService.add();
                     break;
                 case 3:
-                    receiptService.update();
+                    billService.update();
                     break;
                 case 4:
-                    receiptService.findAllDetail();
+                    billService.findAllDetail();
                     break;
                 case 5:
-                    receiptService.approve();
+                    billService.approve();
                     break;
                 case 6:
-                    receiptService.findByIdOrCode();
+                    billService.findByIdOrCode();
                     break;
                 case 7:
                     return;

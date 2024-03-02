@@ -95,8 +95,8 @@ Price float not null check (Price > 0)
 
 insert into Bill(Bill_Code, Bill_Type, Emp_id_created, Emp_id_auth, Bill_Status) values
 ('B0001', 1, 'EMP01', 'EMP02', 0),
-('B0002', 1, 'EMP01', 'EMP03', 0),
-('B0003', 1, 'EMP02', 'EMP01', 0),
+('B0002', 0, 'EMP01', 'EMP03', 0),
+('B0003', 0, 'EMP02', 'EMP01', 0),
 ('B0004', 1, 'EMP03', 'EMP01', 0),
 ('B0005', 1, 'EMP02', 'EMP03', 0)
 ;
@@ -133,3 +133,4 @@ insert into Bill_detail(Bill_Id, Product_Id, Quantity, Price) values
 insert into Bill_detail(Bill_Id, Product_Id, Quantity, Price) values
 (12, 'P0002', 30, 100)
 ;
+select * from bill_detail;

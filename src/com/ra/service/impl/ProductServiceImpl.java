@@ -97,10 +97,10 @@ public class ProductServiceImpl implements ProductService {
         int currentPage = 1;
 
         System.out.print("Nhập tên sản phẩm muốn tìm kiếm: ");
-        String searchName = Console.scanner.nextLine();
+        String searchName = Console.scanner.nextLine().toLowerCase();
         List<Product> productsFound = new ArrayList<>();
         for (Product p : productRepository.findAll(Product.class)){
-            if (p.getProductName().toLowerCase().contains(searchName.toLowerCase())) {
+            if (p.getProductName().toLowerCase().contains(searchName)) {
                 productsFound.add(p);
             }
         }

@@ -152,10 +152,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         int currentPage = 1;
         final int pageSize = 10;
         System.out.print("Nhập mã hoặc tên nhân viên tìm kiếm: ");
-        String stringFind = Console.scanner.nextLine();
+        String stringFind = Console.scanner.nextLine().toLowerCase();
         List<Employee> employeeResult = new ArrayList<>();
         for (Employee e : employeeRepository.findAll(Employee.class)) {
-            if (e.getEmployeeId().toLowerCase().contains(stringFind.toLowerCase()) || e.getEmployeeName().toLowerCase().contains(stringFind)) {
+            if (e.getEmployeeId().toLowerCase().contains(stringFind) || e.getEmployeeName().toLowerCase().contains(stringFind)) {
                 employeeResult.add(e);
             }
         }
