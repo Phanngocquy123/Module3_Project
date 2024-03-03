@@ -69,8 +69,8 @@ public class Product {
     }
 
     public void setProductId(String productId) throws Exception {
-        if (productId.length() != 5)
-            throw new InputException("-> Mã sản phẩm phải gồm 5 ký tự");
+        if (productId.length() > 5)
+            throw new InputException("-> Mã sản phẩm <= 5 ký tự");
 
         this.productId = productId;
     }

@@ -31,24 +31,28 @@ public class StatisticsManager implements Manager {
                     statisticsService.receiptCostByDate();
                     break;
                 case 2:
-
+                    statisticsService.receiptCostByDateRange();
                     break;
                 case 3:
                     statisticsService.billCostByDate();
                     break;
                 case 4:
-
+                    statisticsService.billCostByDateRange();
                     break;
                 case 5:
-
+                    statisticsService.employeeCountByStatus();
                     break;
                 case 6:
+                    statisticsService.maxReceiptProductByDateRange();
                     break;
                 case 7:
+                    statisticsService.minReceiptProductByDateRange();
                     break;
                 case 8:
+                    statisticsService.maxBillProductByDateRange();
                     break;
                 case 9:
+                    statisticsService.minBillProductByDateRange();
                     break;
                 case 10:
                     return;

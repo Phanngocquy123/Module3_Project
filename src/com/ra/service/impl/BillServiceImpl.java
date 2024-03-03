@@ -12,6 +12,7 @@ import com.ra.util.MySqlConnect;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,10 @@ public class BillServiceImpl implements GoodsSlipService{
         this.productRepository = productRepository;
     }
 
+    public BillServiceImpl(){
+        this.billRepository = new Repository<>();
+        this.billDetailRepository = new Repository<>();
+    }
 
     @Override
     public void findAll() {
@@ -44,8 +49,8 @@ public class BillServiceImpl implements GoodsSlipService{
     @Override
     public void findAllDetail() {
         Connection conn = null;
-        System.out.println("===============DANH SÁCH CHI TIẾT PHIẾU XUẤT===================");
-        System.out.println("| Bill_Detail_Id| Bill_Id| Bill_code| Product_Id| Quantity| Price");
+        System.out.println("=====================DANH SÁCH CHI TIẾT PHIẾU XUẤT=========================");
+        System.out.println("| Bill_Detail_Id| Bill_Id| Bill_code| Product_Id| Quantity| Price  | Created");
         try {
             conn = MySqlConnect.open();
             CallableStatement cs = conn.prepareCall("{call find_detail_bill()}");
@@ -58,8 +63,11 @@ public class BillServiceImpl implements GoodsSlipService{
                 float price = rs.getFloat("Price");
                 String formattedPrice = String.format("%.2f", price);
                 String billCode = rs.getString("Bill_Code");
-                System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %s\n",
-                        billDetailId, billId, billCode, productId, quantity, formattedPrice);
+                Date createdDate = rs.getDate("Created");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = dateFormat.format(createdDate);
+                System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %-7s| %s\n",
+                        billDetailId, billId, billCode, productId, quantity, formattedPrice, formattedDate);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -69,26 +77,31 @@ public class BillServiceImpl implements GoodsSlipService{
     }
 
     @Override
-    public void add() {
+    public void add(String empIdAcc) {
         do {
             System.out.println("< Tạo phiếu xuất >");
             Bill bill = new Bill();
             BillDetail billDetail = new BillDetail();
             try {
                 // add bill
-                System.out.print("Nhập mã code (B0001): ");
+                System.out.print("Nhập mã code: ");
                 bill.setBillCode(Console.scanner.nextLine());
                 bill.setBillType(false);
-                employeeService.showAll();
-                System.out.print("Nhập mã nhân viên XUẤT: ");
-                String empployeeId = Console.scanner.nextLine();
-                bill.setEmployeeIdCreated(empployeeId);
-                bill.setEmployeeIdAuth(empployeeId); // tạm thời lấy thằng này, khi cập nhật sẽ chọn lại
+
+                if (empIdAcc == null){
+                    employeeService.showAll();
+                    System.out.print("Nhập mã nhân viên XUẤT: ");
+                    String empployeeId = Console.scanner.nextLine();
+                    bill.setEmployeeIdCreated(empployeeId);
+                    bill.setEmployeeIdAuth(empployeeId);           // tạm thời lấy thằng này, khi cập nhật sẽ chọn lại
+                } else {
+                    bill.setEmployeeIdCreated(empIdAcc);
+                    bill.setEmployeeIdAuth(empIdAcc);
+                }
                 bill.setCreated(new Date());
                 bill.setAuthDate(new Date());
                 bill.setBillStatus(0);
                 billRepository.add(bill);
-
                 // add bill detail
                 List<Bill> lastBillId = billRepository.findAll(Bill.class);
                 billDetail.setBillId(lastBillId.size());
@@ -97,8 +110,10 @@ public class BillServiceImpl implements GoodsSlipService{
                 billDetail.setProductId(Console.scanner.nextLine());
                 System.out.print("Nhập số lượng sản phẩm: ");
                 billDetail.setQuantity(Integer.parseInt(Console.scanner.nextLine()));
+
                 System.out.print("Nhập giá XUẤT: ");
                 billDetail.setPrice(Float.parseFloat(Console.scanner.nextLine()));
+
                 billDetailRepository.add(billDetail);
 
                 System.out.println("Thêm phiếu Xuất thành công! Bạn có muốn nhập tiếp (Y:có - N:Không): ");
@@ -113,7 +128,7 @@ public class BillServiceImpl implements GoodsSlipService{
     }
 
     @Override
-    public void update() {
+    public void update(String empIdAcc) {
         long billIdResult = 0;
         Bill billToUpdate = null;
         BillDetail billDetailToUpdate = new BillDetail();
@@ -149,10 +164,14 @@ public class BillServiceImpl implements GoodsSlipService{
                 billToUpdate.setBillCode(newBillCode);
             }
 
-            employeeService.showAll();
-            System.out.print("Nhập mới mã nhân viên Xuất: ");
-            String empployeeId = Console.scanner.nextLine();
-            billToUpdate.setEmployeeIdCreated(empployeeId);
+            if (empIdAcc == null){
+                employeeService.showAll();
+                System.out.print("Nhập mới mã nhân viên Xuất: ");
+                String empployeeId = Console.scanner.nextLine();
+                billToUpdate.setEmployeeIdCreated(empployeeId);
+            } else {
+                billToUpdate.setEmployeeIdCreated(empIdAcc);
+            }
 
             billToUpdate.setCreated(new Date());
 
@@ -244,19 +263,42 @@ public class BillServiceImpl implements GoodsSlipService{
     }
 
     @Override
-    public void findByIdOrCode() {
+    public void findByIdOrCode(String empIdAcc) {
         int count = 0;
         System.out.print("Nhập mã phiếu hoặc mã code cần tìm (Bill_id or Bill_code): ");
         String search = Console.scanner.nextLine().toLowerCase();
+        List<Bill> listBill = billRepository.findAll(Bill.class);
         Bill.showHeader();
-        for (Bill b : billRepository.findAll(Bill.class)) {
-            if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && !b.isBillType()) {
-                b.show();
-                count++;
+        if (empIdAcc == null){
+            for (Bill b : listBill) {
+                if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && !b.isBillType()) {
+                    b.show();
+                    count++;
+                }
+            }
+        } else {
+            for (Bill b : listBill) {
+                if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && !b.isBillType() && b.getEmployeeIdCreated().equals(empIdAcc)) {
+                    b.show();
+                    count++;
+                }
             }
         }
+
         if (count ==0){
             System.out.print("Không tìm thấy phiếu xuất với từ khóa: "+ search);
+        }
+    }
+
+    @Override
+    public void listByStatus(String empIdAcc) {
+        System.out.print("Nhập trạng thái muốn hiển thị  0-Tạo; 1-Hủy;  2-Duyệt:");
+        int numberStatus = Integer.parseInt(Console.scanner.nextLine());
+        Bill.showHeader();
+        for (Bill b : billRepository.findAll(Bill.class)) {
+            if (b.getBillStatus() == numberStatus && !b.isBillType() && b.getEmployeeIdCreated().equals(empIdAcc)) {
+                b.show();
+            }
         }
     }
 }

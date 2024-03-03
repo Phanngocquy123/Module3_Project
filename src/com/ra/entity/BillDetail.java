@@ -62,8 +62,8 @@ public class BillDetail {
     }
 
     public void setProductId(String productId) throws Exception{
-        if (productId.length() != 5)
-            throw new InputException("-> Mã sản phẩm phải gồm 5 ký tự");
+        if (productId.length() > 5)
+            throw new InputException("-> Mã sản phẩm <= 5 ký tự");
         this.productId = productId;
     }
 
@@ -79,12 +79,12 @@ public class BillDetail {
         this.price = price;
     }
 
-    public static void showHeader(){
-        System.out.println("===========================================DANH SÁCH CHI TIẾT PHIẾU NHẬP===============================================");
-        System.out.println("| Bill_Detail_Id| Bill_Id| Product_Id| Quantity| Price");  //bill_id mã phiếu nhập/ xuất
-    }
-    public void show(){
-        System.out.printf("| %-17d| %-7d| %-10s| %-8d| %f\n",
-               this.billDetailId, this.billId,this.productId,this.quantity, this.price);
-    }
+//    public static void showHeader(){
+//        System.out.println("====================DANH SÁCH CHI TIẾT PHIẾU==========================");
+//        System.out.println("| Bill_Detail_Id| Bill_Id| Product_Id| Quantity| Price");  //bill_id mã phiếu nhập/ xuất
+//    }
+//    public void show(){
+//        System.out.printf("| %-17d| %-7d| %-10s| %-8d| %f\n",
+//               this.billDetailId, this.billId,this.productId,this.quantity, this.price);
+//    }
 }

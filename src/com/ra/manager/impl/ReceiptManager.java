@@ -15,6 +15,7 @@ public class ReceiptManager implements Manager {
 
     EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
     ProductServiceImpl productService = new ProductServiceImpl();
+    String empIdAcc = null;
 
     @Override
     public void run() {
@@ -34,10 +35,10 @@ public class ReceiptManager implements Manager {
                     receiptService.findAll();
                     break;
                 case 2:
-                    receiptService.add();
+                    receiptService.add(empIdAcc);
                     break;
                 case 3:
-                    receiptService.update();
+                    receiptService.update(empIdAcc);
                     break;
                 case 4:
                     receiptService.findAllDetail();
@@ -46,7 +47,7 @@ public class ReceiptManager implements Manager {
                     receiptService.approve();
                     break;
                 case 6:
-                    receiptService.findByIdOrCode();
+                    receiptService.findByIdOrCode(empIdAcc);
                     break;
                 case 7:
                     return;

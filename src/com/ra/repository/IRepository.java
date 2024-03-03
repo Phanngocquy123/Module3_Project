@@ -8,4 +8,6 @@ public interface IRepository<T, K> {
     T add(T entity);
     T edit(T entity);
     boolean remove(K id, Class<T> entityClass);
+
+
 }

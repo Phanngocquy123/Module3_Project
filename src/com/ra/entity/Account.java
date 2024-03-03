@@ -79,8 +79,8 @@ public class Account {
     }
 
     public void setEmployeeId(String employeeId) throws Exception{
-        if (employeeId.length() != 5)
-            throw new InputException("-> Mã nhân viên phải gồm 5 ký tự");
+        if (employeeId.length() > 5)
+            throw new InputException("-> Mã nhân viên <= 5 ký tự");
         this.employeeId = employeeId;
     }
 

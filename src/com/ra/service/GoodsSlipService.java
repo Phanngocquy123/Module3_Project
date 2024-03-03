@@ -6,8 +6,10 @@ public interface GoodsSlipService {
     void findAll();
     void findAllDetail();
 
-    void add();
-    void update();
+    void add(String empIdAcc);
+    void update(String empIdAcc);
     void approve();
-    void findByIdOrCode();
+    void findByIdOrCode(String empIdAcc);
+
+    void listByStatus(String empIdAcc);
 }

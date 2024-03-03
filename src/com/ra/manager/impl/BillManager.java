@@ -16,6 +16,8 @@ public class BillManager implements Manager {
     EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
     ProductServiceImpl productService = new ProductServiceImpl();
 
+    String empIdAcc = null;
+
     @Override
     public void run() {
         do {
@@ -34,10 +36,10 @@ public class BillManager implements Manager {
                     billService.findAll();
                     break;
                 case 2:
-                    billService.add();
+                    billService.add(empIdAcc);
                     break;
                 case 3:
-                    billService.update();
+                    billService.update(empIdAcc);
                     break;
                 case 4:
                     billService.findAllDetail();
@@ -46,7 +48,7 @@ public class BillManager implements Manager {
                     billService.approve();
                     break;
                 case 6:
-                    billService.findByIdOrCode();
+                    billService.findByIdOrCode(empIdAcc);
                     break;
                 case 7:
                     return;

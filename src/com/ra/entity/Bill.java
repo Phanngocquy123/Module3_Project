@@ -84,8 +84,6 @@ public class Bill {
     }
 
     public void setBillType(boolean billType) throws Exception{
-      //  if (billType != 0 && billType != 1)
-      //      throw new InputException("-> Loại phiếu: 0 - Xuất;  1 - Nhập");
         this.billType = billType;
     }
 
@@ -123,7 +121,7 @@ public class Bill {
         String authDate = dateFormat.format(this.authDate);
         String statusResult = convertBillStatus(this.billStatus);
         System.out.printf("| %-7d| %-10s| %-9s| %-14s| %-19s| %-11s| %-19s |%s\n",
-                this.billId, this.billCode, this.billType?"Nhập":"Xuất", this.employeeIdCreated, created, this.employeeIdAuth, authDate, statusResult);
+                this.billId, this.billCode, this.billType?" Nhập":" Xuất", this.employeeIdCreated, created, this.employeeIdAuth, authDate, statusResult);
     }
 
     public static String convertBillStatus(int billStatus) {
@@ -131,7 +129,7 @@ public class Bill {
             case 0 -> "Tạo";
             case 1 -> "Hủy";
             case 2 -> "Duyệt";
-            default -> "Trạng thái không xác định";
+            default -> "";
         };
     }
 }

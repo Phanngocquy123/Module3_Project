@@ -22,6 +22,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    @Override
+    public Account login(String user, String pass) {
+        for (Account a : accountRepository.findAll(Account.class)){
+            if (a.getUserName().equals(user) && a.getPassword().equals(pass)){
+                if (!a.isAccountStatus()){
+                    return null;
+                }
+                return a;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void showAll() {
