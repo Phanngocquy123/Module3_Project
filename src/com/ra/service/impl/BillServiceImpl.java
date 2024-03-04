@@ -49,7 +49,9 @@ public class BillServiceImpl implements GoodsSlipService{
     @Override
     public void findAllDetail() {
         Connection conn = null;
-        System.out.println("=====================DANH SÁCH CHI TIẾT PHIẾU XUẤT=========================");
+        System.out.print("Nhập mã phiếu hoặc mã code cần xem chi tiết (Bill_id or Bill_code): ");
+        String search = Console.scanner.nextLine();
+        System.out.println("=====================CHI TIẾT PHIẾU XUẤT=========================");
         System.out.println("| Bill_Detail_Id| Bill_Id| Bill_code| Product_Id| Quantity| Price  | Created");
         try {
             conn = MySqlConnect.open();
@@ -66,8 +68,13 @@ public class BillServiceImpl implements GoodsSlipService{
                 Date createdDate = rs.getDate("Created");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = dateFormat.format(createdDate);
-                System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %-7s| %s\n",
-                        billDetailId, billId, billCode, productId, quantity, formattedPrice, formattedDate);
+
+                if ((String.valueOf(billId).equals(search) || billCode.equals(search))) {
+                    System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %-7s| %s\n",
+                            billDetailId, billId, billCode, productId, quantity, formattedPrice, formattedDate);
+
+                }
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();

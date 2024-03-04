@@ -52,7 +52,9 @@ public class ReceiptServiceImpl implements GoodsSlipService {
     @Override
     public void findAllDetail() {
         Connection conn = null;
-        System.out.println("=====================DANH SÁCH CHI TIẾT PHIẾU NHẬP=========================");
+        System.out.print("Nhập mã phiếu hoặc mã code cần xem chi tiết (Bill_id or Bill_code): ");
+        String search = Console.scanner.nextLine();
+        System.out.println("=============================CHI TIẾT PHIẾU NHẬP=============================");
         System.out.println("| Bill_Detail_Id| Bill_Id| Bill_code| Product_Id| Quantity| Price  | Created");
         try {
             conn = MySqlConnect.open();
@@ -69,8 +71,13 @@ public class ReceiptServiceImpl implements GoodsSlipService {
                 Date createdDate = rs.getDate("Created");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = dateFormat.format(createdDate);
-                System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %-7s| %s\n",
-                        billDetailId, billId, billCode, productId, quantity, formattedPrice, formattedDate);
+
+                if ((String.valueOf(billId).equals(search) || billCode.equals(search))) {
+                    System.out.printf("| %-14d| %-7d| %-9s| %-10s| %-8d| %-7s| %s\n",
+                            billDetailId, billId, billCode, productId, quantity, formattedPrice, formattedDate);
+
+                }
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -92,7 +99,7 @@ public class ReceiptServiceImpl implements GoodsSlipService {
                 bill.setBillCode(Console.scanner.nextLine());
                 bill.setBillType(true);
 
-                if (empIdAcc == null){                 // check admin hay user
+                if (empIdAcc == null) {                 // check admin hay user
                     employeeService.showAll();
                     System.out.print("Nhập mã nhân viên nhập: ");
                     String empployeeId = Console.scanner.nextLine();
@@ -168,7 +175,7 @@ public class ReceiptServiceImpl implements GoodsSlipService {
                 billToUpdate.setBillCode(newBillCode);
             }
 
-            if (empIdAcc == null){
+            if (empIdAcc == null) {
                 employeeService.showAll();
                 System.out.print("Nhập mới mã nhân viên nhập: ");
                 String empployeeId = Console.scanner.nextLine();
@@ -241,7 +248,7 @@ public class ReceiptServiceImpl implements GoodsSlipService {
             billToApprove.setAuthDate(new Date());
             System.out.print("Bạn có muốn duyệt phiếu: 2-Duyệt   3-Thoát: ");
             int intStatus = Integer.parseInt(Console.scanner.nextLine());
-            if (intStatus != 2){
+            if (intStatus != 2) {
                 return;
             }
             billToApprove.setBillStatus(2);
@@ -265,12 +272,12 @@ public class ReceiptServiceImpl implements GoodsSlipService {
 
     @Override
     public void findByIdOrCode(String empIdAcc) {
-        int count =0 ;
+        int count = 0;
         System.out.print("Nhập mã phiếu hoặc mã code cần tìm (Bill_id or Bill_code): ");
         String search = Console.scanner.nextLine().toLowerCase();
         List<Bill> listBill = receiptRepository.findAll(Bill.class);
         Bill.showHeader();
-        if (empIdAcc == null){
+        if (empIdAcc == null) {
             for (Bill b : listBill) {
                 if (((String.valueOf(b.getBillId())).toLowerCase().contains(search) || b.getBillCode().toLowerCase().contains(search)) && b.isBillType()) {
                     b.show();
@@ -286,8 +293,8 @@ public class ReceiptServiceImpl implements GoodsSlipService {
             }
         }
 
-        if (count == 0){
-            System.out.print("Không tìm thấy phiếu xuất với từ khóa: \n"+ search);
+        if (count == 0) {
+            System.out.print("Không tìm thấy phiếu xuất với từ khóa: \n" + search);
         }
     }
 
